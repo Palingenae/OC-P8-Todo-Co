@@ -34,6 +34,8 @@ services:
       - .env
     depends_on:
       - db
+    ports:
+      - "8307:8307"
     user: 1000:1000
   node:
     image: node:16.15.1
@@ -43,9 +45,3 @@ services:
     volumes:
       - './application:/usr/src/app'
     restart: on-failure
-  blackfire:
-    image: blackfire/blackfire:2
-    ports: ["8307"]
-    env_file:
-        # Exposes BLACKFIRE_* environment variables from the host
-        - .env
