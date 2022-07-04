@@ -1,4 +1,6 @@
-FROM php:5.5.38-fpm
+FROM php:5.5.38-apache
+
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 RUN apt-get update && \
     apt-get upgrade -y && \
@@ -20,6 +22,7 @@ COPY --chown=1000:1000 application /usr/src/app
 
 RUN mkdir -p /.composer/cache && chown -R 1000:1000 /.composer
 
-RUN PATH=$PATH:/usr/src/app/vendor/bin:bin
+ADD docker/php/conf/apache/000-default.conf /etc/apache2/sites-enabled/
 
-USER 1000:1000
+ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/src/app/vendor/bin
+
