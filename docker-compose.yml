@@ -28,12 +28,3 @@ services:
     ports:
       - "80:80"
       - "443:443"
-
-#  node:
-#    image: node:16.15.1
-#    build:
-#      context: . 
-#      dockerfile: docker/node/Dockerfile
-#    volumes:
-#      - './application:/usr/src/app'
-#    restart: on-failure

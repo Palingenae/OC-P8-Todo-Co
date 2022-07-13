@@ -1,1 +1,0 @@
-{"buildTargets":["blackfire-curl","build","composer-install","dev","env","help","migration","phpcsfixer","phpstan","remove-dev","reset-dev","restart","stop","up"],"launchTargets":[],"customConfigurationProvider":{"workspaceBrowse":{"browsePath":[],"compilerArgs":[]},"fileIndex":[]}}
