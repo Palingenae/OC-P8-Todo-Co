@@ -1,0 +1,30 @@
+version: '3.9'
+services:
+  db:
+    image: mariadb:10.8.3-jammy
+    restart: on-failure
+    ports:
+      - '3306:3306'
+    env_file: 
+      - .env
+  adminer:
+    image: adminer
+    restart: on-failure
+    ports:
+      - '8080:8080'
+
+  php: 
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    volumes:
+      - './application:/var/www/html'
+      - './docker/php/conf/php.ini:/usr/local/etc/php/conf.d/php.ini'
+    restart: on-failure
+    env_file:
+      - .env
+    depends_on:
+      - db
+    ports:
+      - "80:80"
+      - "443:443"
