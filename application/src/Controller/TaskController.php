@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TaskController extends AbstractController
 {
+    private $taskRepository;
+
     public function __construct(TaskRepository $taskRepository)
     {
         $this->taskRepository = $taskRepository;
