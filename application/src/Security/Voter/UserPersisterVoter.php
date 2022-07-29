@@ -23,19 +23,24 @@ class UserPersisterVoter extends Voter
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
+        /** @var User $subject */
         $user = $token->getUser();
         if (!$user instanceof UserInterface) {
             return false;
         }
 
+        $condition = ['ROLES_ADMIN'] == $user->getRoles() || $subject->getUsername() == $user;
+
         switch ($attribute) {
             case self::PERSIST:
-                // logic to determine if the user can EDIT
-                // return true or false
+                if ($condition) {
+                    return true;
+                }
                 break;
             case self::VIEW:
-                // logic to determine if the user can VIEW
-                // return true or false
+                if ($condition) {
+                    return true;
+                }
                 break;
         }
 
