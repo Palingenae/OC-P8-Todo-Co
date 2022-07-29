@@ -20,31 +20,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=25, unique=true)
      * @Assert\NotBlank(message="Vous devez saisir un nom d'utilisateur.")
      */
-    private $username;
+    private string $username;
 
     /**
      * @ORM\Column(type="string", length=64)
      */
-    private $password;
+    private string $password;
 
     /**
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(type="json", length=64)
      * @var array
      */
-    private $roles = [];
+    private array $roles = [];
 
     /**
      * @ORM\Column(type="string", length=60, unique=true)
      * @Assert\NotBlank(message="Vous devez saisir une adresse email.")
      * @Assert\Email(message="Le format de l'adresse n'est pas correcte.")
      */
-    private $email;
+    private string $email;
 
     public function getId(): ?int
     {
