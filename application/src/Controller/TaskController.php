@@ -8,14 +8,18 @@ use App\Repository\TaskRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 
 class TaskController extends AbstractController
 {
-    private $taskRepository;
+    private TaskRepository $taskRepository;
 
-    public function __construct(TaskRepository $taskRepository)
+    private Security $security;
+
+    public function __construct(TaskRepository $taskRepository, Security $security)
     {
         $this->taskRepository = $taskRepository;
+        $this->security = $security;
     }
 
     /**
@@ -43,7 +47,9 @@ class TaskController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $task = $form->getData();
 
-            $this->taskRepository->add($task, true);
+            $task->setUser($this->security->getUser());
+
+            $this->taskRepository->persist($task, true);
 
             $this->addFlash('success', 'La tâche a bien été ajoutée.');
 
@@ -65,7 +71,10 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+
+            $this->denyAccessUnlessGranted('PERSIST', $task);
+
+            $this->taskRepository->persist($task, true);
 
             $this->addFlash('success', 'La tâche a bien été modifiée.');
 
@@ -83,8 +92,11 @@ class TaskController extends AbstractController
      */
     public function toggleTaskAction(Task $task)
     {
+        $this->denyAccessUnlessGranted('PERSIST', $task);
+
         $task->toggle(!$task->isDone());
-        $this->getDoctrine()->getManager()->flush();
+
+        $this->taskRepository->persist($task, true);
 
         $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
 
@@ -96,9 +108,9 @@ class TaskController extends AbstractController
      */
     public function deleteTaskAction(Task $task)
     {
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($task);
-        $em->flush();
+        $this->denyAccessUnlessGranted('PERSIST', $task);
+
+        $this->taskRepository->remove($task, true);
 
         $this->addFlash('success', 'La tâche a bien été supprimée.');
 

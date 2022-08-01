@@ -23,9 +23,21 @@ class TaskRepository extends ServiceEntityRepository
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function add(Task $entity, bool $flush = true): void
+    public function persist(Task $entity, bool $flush = true): void
     {
         $this->_em->persist($entity);
+        if ($flush) {
+            $this->_em->flush();
+        }
+    }
+
+    /**
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function remove(Task $entity, bool $flush = true): void
+    {
+        $this->_em->remove($entity);
         if ($flush) {
             $this->_em->flush();
         }

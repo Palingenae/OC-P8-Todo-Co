@@ -37,7 +37,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="json", length=64)
-     * @var array
      */
     private array $roles = [];
 
@@ -57,7 +56,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->tasks = new ArrayCollection();
     }
-
 
     public function getId(): ?int
     {
