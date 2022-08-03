@@ -72,7 +72,6 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->denyAccessUnlessGranted('PERSIST', $task);
 
             $this->taskRepository->persist($task, true);

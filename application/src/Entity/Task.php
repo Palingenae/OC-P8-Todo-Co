@@ -133,12 +133,12 @@ class Task
         return $this;
     }
 
-    public function getDueDate(): ?\DateTimeInterface
+    public function getDueDate(): ?DateTimeInterface
     {
         return $this->dueDate;
     }
 
-    public function setDueDate(?\DateTimeInterface $dueDate): self
+    public function setDueDate(?DateTimeInterface $dueDate): self
     {
         $this->dueDate = $dueDate;
 
