@@ -10,7 +10,6 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UserType extends AbstractType
 {
@@ -18,21 +17,21 @@ class UserType extends AbstractType
     {
         $builder
             ->add('username', TextType::class, [
-                'label' => "Nom d'utilisateur"
+                'label' => "Nom d'utilisateur",
             ])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les deux mots de passe doivent correspondre.',
                 'required' => true,
                 'first_options' => [
-                    'label' => 'Mot de passe'
+                    'label' => 'Mot de passe',
                 ],
                 'second_options' => [
-                    'label' => 'Tapez le mot de passe à nouveau'
+                    'label' => 'Tapez le mot de passe à nouveau',
                 ],
             ])
             ->add('email', EmailType::class, [
-                'label' => 'Adresse email'
+                'label' => 'Adresse email',
                 ])
             ->add('roles', ChoiceType::class, [
                 'label' => 'Rôle',
@@ -41,7 +40,7 @@ class UserType extends AbstractType
                 'choices' => [
                     'Utilisateur·rice' => 'ROLE_USER',
                     'Administrateur·rice' => 'ROLE_ADMIN',
-                ]
+                ],
             ])
         ;
 

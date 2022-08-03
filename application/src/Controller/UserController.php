@@ -5,20 +5,21 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManager;
-use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\Security;
 
 class UserController extends AbstractController
 {
-    private $userRepository;
+    private UserRepository $userRepository;
+    private Security $security;
 
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserRepository $userRepository, Security $security)
     {
         $this->userRepository = $userRepository;
+        $this->security = $security;
     }
 
     /**
@@ -26,6 +27,9 @@ class UserController extends AbstractController
      */
     public function listAction()
     {
+        $admin = $this->security->getUser();
+        $this->denyAccessUnlessGranted('VIEW', $admin);
+
         $users = $this->userRepository->findAll();
 
         return $this->render('user/list.html.twig', [
@@ -44,6 +48,9 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $admin = $this->security->getUser();
+            $this->denyAccessUnlessGranted('PERSIST', $admin);
+
             $user = $form->getData();
             $user->setPassword(
                 $passwordHasher->hashPassword(
@@ -52,9 +59,7 @@ class UserController extends AbstractController
                 )
             );
 
-            // dd($user);
-
-            dump($this->userRepository->add($user, true));
+            $this->userRepository->add($user, true);
 
             $this->addFlash('success', "L'utilisateur a bien été ajouté.");
 
@@ -76,6 +81,9 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $admin = $this->security->getUser();
+            $this->denyAccessUnlessGranted('PERSIST', $admin);
+
             $user = $form->getData();
             $user->setPassword(
                 $passwordHasher->hashPassword(

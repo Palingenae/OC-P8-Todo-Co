@@ -7,11 +7,8 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class UserPersisterVoter extends Voter
+class AdminVoter extends Voter
 {
-    /**
-     * Persist is both for creating an user and updating it.
-     */
     public const PERSIST = 'PERSIST';
     public const VIEW = 'VIEW';
 
@@ -23,13 +20,13 @@ class UserPersisterVoter extends Voter
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
-        /** @var User $subject */
-        $user = $token->getUser();
-        if (!$user instanceof UserInterface) {
+        $admin = $token->getUser();
+
+        if (!$admin instanceof UserInterface) {
             return false;
         }
 
-        $condition = ['ROLE_ADMIN'] == $user->getRoles() || $subject->getUsername() == $user;
+        $condition = ['ROLE_ADMIN', 'ROLE_USER'] === $admin->getRoles();
 
         switch ($attribute) {
             case self::PERSIST:

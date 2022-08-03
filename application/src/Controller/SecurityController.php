@@ -34,8 +34,8 @@ class SecurityController extends AbstractController
     /**
      * @Route("/logout", name="logout")
      */
-    public function logoutCheck()
+    public function logoutCheck(): Response
     {
-        // This code is never executed.
+        return $this->redirectToRoute('homepage');
     }
 }
