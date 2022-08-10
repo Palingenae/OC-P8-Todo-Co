@@ -19,10 +19,6 @@ class TaskRepository extends ServiceEntityRepository
         parent::__construct($registry, Task::class);
     }
 
-    /**
-     * @throws ORMException
-     * @throws OptimisticLockException
-     */
     public function persist(Task $entity, bool $flush = true): void
     {
         $this->_em->persist($entity);
@@ -31,10 +27,6 @@ class TaskRepository extends ServiceEntityRepository
         }
     }
 
-    /**
-     * @throws ORMException
-     * @throws OptimisticLockException
-     */
     public function remove(Task $entity, bool $flush = true): void
     {
         $this->_em->remove($entity);

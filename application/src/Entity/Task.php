@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -44,17 +45,17 @@ class Task
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="tasks")
      */
-    private User $user;
+    private ?User $user;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isOverdue;
+    private bool $isOverdue;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $dueDate;
+    private ?\DateTimeInterface $dueDate;
 
     public function __construct()
     {
@@ -73,7 +74,7 @@ class Task
         return $this->createdAt;
     }
 
-    public function setCreatedAt($createdAt): void
+    public function setCreatedAt(DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -83,7 +84,7 @@ class Task
         return $this->title;
     }
 
-    public function setTitle($title): void
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
@@ -93,7 +94,7 @@ class Task
         return $this->content;
     }
 
-    public function setContent($content): void
+    public function setContent(string $content): void
     {
         $this->content = $content;
     }
@@ -103,7 +104,7 @@ class Task
         return $this->isDone;
     }
 
-    public function toggle($flag)
+    public function toggle(bool $flag): void
     {
         $this->isDone = $flag;
     }
@@ -132,12 +133,12 @@ class Task
         return $this;
     }
 
-    public function getDueDate(): ?\DateTimeInterface
+    public function getDueDate(): ?DateTimeInterface
     {
         return $this->dueDate;
     }
 
-    public function setDueDate(?\DateTimeInterface $dueDate): self
+    public function setDueDate(?DateTimeInterface $dueDate): self
     {
         $this->dueDate = $dueDate;
 

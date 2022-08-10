@@ -1,0 +1,8 @@
+parameters:
+	level: 8
+	checkGenericClassInNonGenericObjectType: false
+	doctrine:
+		ormRepositoryClass: MyApp\Doctrine\BetterEntityRepository
+	paths:
+		- src
+		- tests

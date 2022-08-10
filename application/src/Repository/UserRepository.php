@@ -11,6 +11,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method User|null findOneBy(array $criteria, array $orderBy = null)
  * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * 
  */
 class UserRepository extends ServiceEntityRepository
 {
@@ -19,10 +20,6 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
-    /**
-     * @throws ORMException
-     * @throws OptimisticLockException
-     */
     public function add(User $entity, bool $flush = true): void
     {
         $this->_em->persist($entity);
