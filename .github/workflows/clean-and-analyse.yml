@@ -1,0 +1,56 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+env:
+  PHP_VERSION: 7.4.30
+  COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  COVERAGE: 0
+  SYMFONY_DEPRECATION_HELPER: disabled=1
+
+jobs:
+  php-cs-fixer:
+    name: PHP-cs-fixer (PHP ${{ matrix.php }})
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: application/
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with: 
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: intl, bcmath, curl, openssl, mbstring
+          ini-values: memory-limit=1
+          tools: pecl, composer
+          coverage: none
+      - name: Install Composer Dependencies
+        run: composer install
+      - name: Run PHP-cs-fixer fix
+        run: vendor/bin/php-cs-fixer fix --diff -vvv
+  phpstan:
+    name: PHPStan (PHP ${{ matrix.php }})
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: application/
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: intl, bcmath, curl, openssl, mbstring
+          ini-values: memory-limit=1
+          tools: pecl, composer
+          coverage: none
+      - name: Install Composer Dependencies
+        run: composer install
+      - name: PHPStan Static Analysis
+        run: php vendor/bin/phpstan analyse
