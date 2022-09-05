@@ -1,0 +1,12 @@
+App\Entity\User:
+  admin:
+    username: 'administrator'
+    password: <hashPassword('adminPassword')>
+    email: 'administrator@todoco.fr'
+    roles: ['ROLE_ADMIN']
+
+  user:
+    username: 'user'
+    password: <hashPassword('userPassword')>
+    email: 'user@todoco.fr'
+    roles: ['ROLE_USER']
