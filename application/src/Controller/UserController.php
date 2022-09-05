@@ -46,10 +46,12 @@ class UserController extends AbstractController
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
 
+        $admin = $this->security->getUser();
+        $this->denyAccessUnlessGranted('VIEW', $admin);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $admin = $this->security->getUser();
             $this->denyAccessUnlessGranted('PERSIST', $admin);
 
             $user = $form->getData();
@@ -79,10 +81,12 @@ class UserController extends AbstractController
     {
         $form = $this->createForm(UserType::class, $user);
 
+        $admin = $this->security->getUser();
+        $this->denyAccessUnlessGranted('VIEW', $admin);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $admin = $this->security->getUser();
             $this->denyAccessUnlessGranted('PERSIST', $admin);
 
             $user = $form->getData();
