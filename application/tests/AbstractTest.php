@@ -2,13 +2,32 @@
 
 namespace App\Tests;
 
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use App\Repository\UserRepository;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-abstract class AbstractTest extends KernelTestCase
+abstract class AbstractTest extends WebTestCase
 {
-
-    protected function setUp(): void
+    protected function createClientWithAdminCredentials(): KernelBrowser
     {
-        self::createKernel();
+        $client = static::createClient();
+        $adminRepository = static::getContainer()->get(UserRepository::class);
+
+        $testAdmin = $adminRepository->findOneByEmail('administrator@todoco.fr');
+        $client->loginUser($testAdmin);
+
+        return $client;
     }
+
+    protected function createClientWithUserCredentials(): KernelBrowser
+    {
+        $client = static::createClient();
+        $userRepository = static::getContainer()->get(UserRepository::class);
+
+        $testUser = $userRepository->findOneByEmail('user@todoco.fr');
+        $client->loginUser($testUser);
+
+        return $client;
+    }
+
 }
