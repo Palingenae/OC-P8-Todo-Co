@@ -11,16 +11,18 @@ class DataTaskPersisterTest extends AbstractTest
 
     public function testPersistCreateTask(): void
     {
-        // TODO : utiliser un crawler
+        $client = static::createClientWithUserCredentials();
+
+        
     }
 
-    public function testPersistUpdateTask(): void
-    {
-       // TODO : utiliser un crawler
-    }
+    // public function testPersistUpdateTask(): void
+    // {
+    //    // TODO : utiliser un crawler
+    // }
 
-    public function testPersistDeleteTask(): void
-    {
+    // public function testPersistDeleteTask(): void
+    // {
 
-    }
+    // }
 }

@@ -1,0 +1,8 @@
+App\Entity\Task:
+  task{1..15}:
+    createdAt: <dateTimeBetween('-2 weeks', 'now')>
+    title: <sentence()>
+    content: <paragraph()>
+    user: '@user'
+    isOverdue: 'false'
+    dueDate: <dateTimeBetween('now', '+4 weeks')>
