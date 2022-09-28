@@ -29,5 +29,4 @@ abstract class AbstractTest extends WebTestCase
 
         return $client;
     }
-
 }
