@@ -23,4 +23,7 @@ class DataUserPersisterTest extends AbstractTest
     // {
 
     // }
+
+    // public function testLogOutUser(): void
+    // {}
 }

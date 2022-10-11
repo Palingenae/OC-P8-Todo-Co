@@ -8,6 +8,11 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 abstract class AbstractTest extends WebTestCase
 {
+    public function setUp(): void
+    {
+        $this->client = static::createClient();
+    }
+
     protected function createClientWithAdminCredentials(): KernelBrowser
     {
         $client = static::createClient();
