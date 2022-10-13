@@ -6,57 +6,57 @@ class RoutesTest extends AbstractTest
 {
     public function testDisplayHomepage()
     {
-        $client = static::createClient();
+        $this->client->followRedirects();
 
-        $client->request('GET', '/');
+        $this->client->request('GET', '/');
         $this->assertResponseIsSuccessful();
     }
 
     public function testDisplayLoginPage()
     {
-        $client = static::createClient();
+        $this->client->followRedirects();
 
-        $client->request('GET', '/login');
+        $this->client->request('GET', '/login');
         $this->assertResponseIsSuccessful();
     }
 
     public function testLoggedUserPage()
     {
-        $client = static::createClientWithUserCredentials();
+        static::createClientWithUserCredentials();
 
-        $client->request('GET', '/');
+        $this->client->request('GET', '/');
         $this->assertResponseIsSuccessful();
     }
 
     public function testTaskListLoggedUserPage()
     {
-        $client = static::createClientWithUserCredentials();
+        static::createClientWithUserCredentials();
 
-        $client->request('GET', '/tasks');
+        $this->client->request('GET', '/tasks');
         $this->assertResponseIsSuccessful();
     }
 
     public function testCreateTaskLoggedUserPage()
     {
-        $client = static::createClientWithUserCredentials();
+        static::createClientWithUserCredentials();
 
-        $client->request('GET', '/tasks/create');
+        $this->client->request('GET', '/tasks/create');
         $this->assertResponseIsSuccessful();
     }
 
     public function testUserListLoggedAdminPage() 
     {
-        $client = static::createClientWithAdminCredentials();
+        static::createClientWithAdminCredentials();
 
-        $client->request('GET', '/users');
+        $this->client->request('GET', '/users');
         $this->assertResponseIsSuccessful();
     }
 
     public function testCreateUserLoggedAdminPage() 
     {
-        $client = static::createClientWithAdminCredentials();
+        static::createClientWithAdminCredentials();
 
-        $client->request('GET', '/users/create');
+        $this->client->request('GET', '/users/create');
         $this->assertResponseIsSuccessful();
     }
 }

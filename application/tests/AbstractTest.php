@@ -13,25 +13,19 @@ abstract class AbstractTest extends WebTestCase
         $this->client = static::createClient();
     }
 
-    protected function createClientWithAdminCredentials(): KernelBrowser
+    protected function createClientWithAdminCredentials(): void
     {
-        $client = static::createClient();
         $adminRepository = static::getContainer()->get(UserRepository::class);
 
         $testAdmin = $adminRepository->findOneByEmail('administrator@todoco.fr');
-        $client->loginUser($testAdmin);
-
-        return $client;
+        $this->client->loginUser($testAdmin);
     }
 
-    protected function createClientWithUserCredentials(): KernelBrowser
+    protected function createClientWithUserCredentials(): void
     {
-        $client = static::createClient();
         $userRepository = static::getContainer()->get(UserRepository::class);
 
         $testUser = $userRepository->findOneByEmail('user@todoco.fr');
-        $client->loginUser($testUser);
-
-        return $client;
+        $this->client->loginUser($testUser);
     }
 }
