@@ -2,6 +2,7 @@
 
 namespace App\Tests;
 
+use App\Repository\TaskRepository;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -12,10 +13,13 @@ class DataTaskPersisterTest extends AbstractTest
 
     public function testLogInFormUser(): void
     {
-        $client = static::createClient();
-        $client->request('GET', '/');
-
-        $client->clickLink('Se connecter');
+        $this->client->followRedirects();
+        $urlGenerator = $this->client->getContainer()->get('router.default');
+        
+        $crawler = $this->client->request(
+            Request::METHOD_GET,
+            $urlGenerator->generate('login')
+        );
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('input#username');
@@ -40,19 +44,42 @@ class DataTaskPersisterTest extends AbstractTest
         $this->assertSelectorTextContains('a.btn.btn-danger', 'Se déconnecter');
     }
 
-    // public function testPersistCreateTask(): void
-    // {
-    //     $client = static::createClient();
+    public function testPersistCreateTask(): void
+    {
+        $this->client->followRedirects();
+        $urlGenerator = $this->client->getContainer()->get('router.default');
 
-    //     $client->request('GET', '/');
-    //     $client->clickLink('Créer une nouvelle tâche');
+        $urlGenerator->generate('login');
 
-    //     $this->assertResponseIsSuccessful();
+        $crawler = $this->client->request(
+            Request::METHOD_GET,
+            $urlGenerator->generate('login')
+        );
 
-    //     $client->waitForVisibility('[name="task"]');
-    //     $this->assertSelectorExists('[name="task"]');
+        $form = $crawler->selectButton("Se connecter")->form();
+        $form['_username'] = 'user';
+        $form['_password'] = 'userPassword';
+
+        $this->client->submit($form);
+
+        $this->assertSelectorExists('a.btn.btn-success');
+
+        $crawler = $this->client->clickLink("Créer une nouvelle tâche");
+
+        $taskForm = $crawler->selectButton("Ajouter")->form();
+        $taskForm['task[title]'] = 'assertedTask';
+        $taskForm['task[content]'] = 'assertedTaskContentForTesting';
         
-    // }
+        $this->client->submit($taskForm);
+
+        $this->assertResponseIsSuccessful();
+
+        $taskRepository = static::getContainer()->get(TaskRepository::class);
+        $assertedTask = $taskRepository->findOneByTitle('assertedTask');
+
+        $this->assertSame('assertedTask', $assertedTask->getTitle());
+
+    }
 
     // public function testPersistUpdateTask(): void
     // {
